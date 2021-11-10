@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="nz.co.adriley.meteror.ui">
+
+    <uses-permission android:name="com.symbol.emdk.permission.EMDK"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
+
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:name="nz.co.adriley.meteror.MeterOrApplication"
+        android:theme="@style/AppTheme"
+        android:vmSafeMode="true" >
+        <uses-library android:required="false"  android:name="com.symbol.emdk"/>
+
+        <service android:name="nz.co.adriley.meteror.comms.GPSService" />
+        <service android:name="nz.co.adriley.meteror.comms.AutocommsService"/>
+        <service android:name="com.itron.wh.androiddriver.service.aidl.IItronServiceApi"
+            tools:ignore="Instantiatable" />
+        <service android:name="com.itron.wh.androiddriver.service.aidl.IItronServiceCallback"
+            tools:ignore="Instantiatable" />
+        <service android:name="nz.co.adriley.meteror.utils.notification.NotificationListener"
+            android:enabled="true"
+            android:priority = "1000"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name=".StartActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="506bd1c34cadac686875b50685ddce1d8825e366" />
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_route"
+            android:parentActivityName=".StartActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nz.co.adriley.meteror.ui.StartActivity" />
+        </activity>
+
+        <provider
+            android:name="nz.co.adriley.meteror.database.RouteContentProvider"
+            android:authorities="nz.co.adriley.meteror.database.routecontentprovider" >
+        </provider>
+
+        <activity
+            android:name=".PremiseActivity"
+            android:label="@string/title_activity_premise"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nz.co.adriley.meteror.ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".BookmarkActivity"
+            android:label="@string/title_activity_premise"
+            android:parentActivityName=".PremiseActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nz.co.adriley.meteror.ui.PremiseActivity" />
+        </activity>
+        <activity
+            android:name=".MeterActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_meter"
+            android:parentActivityName=".PremiseActivity"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:windowSoftInputMode="adjustPan" >
+            <meta-data
+                android:name="android.support.UI_OPTIONS"
+                android:value="splitActionBarWhenNarrow" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nz.co.adriley.meteror.ui.PremiseActivity" />
+        </activity>
+        <activity
+            android:name=".CameraActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_camera"
+            android:parentActivityName=".MeterActivity"
+            android:theme="@style/CustomActionBarTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nz.co.adriley.meteror.ui.MeterActivity" />
+        </activity>
+        <activity
+            android:name=".KeyAuditActivity"
+            android:label="@string/title_activity_key_audit" >
+        </activity>
+        <activity
+            android:name=".FullKeyAuditActivity"
+            android:label="@string/title_activity_full_key_audit" >
+        </activity>
+        <activity
+            android:name=".lockscreen.LockScreenActivity"
+            android:label="LockScreenActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <service
+            android:name="nz.co.adriley.meteror.comms.FirebaseMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>
